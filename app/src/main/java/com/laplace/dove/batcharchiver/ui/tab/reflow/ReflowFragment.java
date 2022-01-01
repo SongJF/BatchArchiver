@@ -1,4 +1,4 @@
-package com.laplace.dove.batcharchiver.ui.reflow;
+package com.laplace.dove.batcharchiver.ui.tab.reflow;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,12 +29,7 @@ public class ReflowFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textReflow;
-        reflowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        reflowViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
         return root;
     }
 

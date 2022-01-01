@@ -1,4 +1,4 @@
-package com.laplace.dove.batcharchiver.ui.settings;
+package com.laplace.dove.batcharchiver.ui.tab.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.laplace.dove.batcharchiver.R;
 import com.laplace.dove.batcharchiver.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
@@ -29,12 +28,7 @@ public class SettingsFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textSettings;
-        settingsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        settingsViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
         return root;
     }
 

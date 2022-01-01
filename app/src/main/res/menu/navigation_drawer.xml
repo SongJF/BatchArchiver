@@ -5,10 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_transform"
-            android:icon="@drawable/ic_camera_black_24dp"
-            android:title="@string/menu_transform" />
-        <item
             android:id="@+id/nav_reflow"
             android:icon="@drawable/ic_gallery_black_24dp"
             android:title="@string/menu_reflow" />
