@@ -11,18 +11,14 @@ import com.laplace.dove.batcharchiver.R;
 
 public class DoubleProgressDialog {
     public AlertDialog dialog;
-    public ProgressBar progressBar1;
-    public ProgressBar progressBar2;
-    public TextView textView1;
-    public TextView textView2;
+    public ProgressView firstProgressView;
+    public ProgressView secondProgressView;
 
     public DoubleProgressDialog(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.dialog_double_progress, null);
-        this.textView1 = view.findViewById(R.id.text_view1);
-        this.progressBar1 = view.findViewById(R.id.progress_bar1);
-        this.textView2 = view.findViewById(R.id.text_view2);
-        this.progressBar2 = view.findViewById(R.id.progress_bar2);
+        this.firstProgressView = view.findViewById(R.id.dialog_double_progress_progress1);
+        this.secondProgressView = view.findViewById(R.id.dialog_double_progress_progress2);
 
         dialog = new AlertDialog.Builder(context).setView(view).create();
         dialog.setTitle("DoubleProgressDialog");
@@ -34,5 +30,15 @@ public class DoubleProgressDialog {
 
     public void dismiss(){
         dialog.dismiss();
+    }
+
+    public void firstProgressNext(String tilte){
+        firstProgressView.setProgress(firstProgressView.getProgress() + 1);
+        firstProgressView.setTitle(tilte);
+    }
+
+    public void secondProgressNext(String tilte){
+        secondProgressView.setProgress(secondProgressView.getProgress() + 1);
+        secondProgressView.setTitle(tilte);
     }
 }

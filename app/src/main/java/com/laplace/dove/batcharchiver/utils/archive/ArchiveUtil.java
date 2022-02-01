@@ -47,11 +47,13 @@ public class ArchiveUtil {
         }
         archiveParam.setCompressionLevel(CompressionLevel.valueOf(param.getCompressLevel()));
         for (File file:src) {
-            if (currentFileNotifyer != null && file.isFile()){
+            if (currentFileNotifyer != null){
                 currentFileNotifyer.accept(file);
             }
 
-            zipFile.addFile(file, archiveParam);
+            if (file.isDirectory()){
+                zipFile.addFile(file, archiveParam);
+            }
         }
     }
 

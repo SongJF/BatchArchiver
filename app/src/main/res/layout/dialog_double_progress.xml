@@ -5,32 +5,16 @@
     android:padding="20dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_view1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="text_view1"/>
-    <ProgressBar
-        android:id="@+id/progress_bar1"
+    <com.laplace.dove.batcharchiver.ui.dialog.ProgressView
+        android:id="@+id/dialog_double_progress_progress1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
-
-    <TextView
-        android:id="@+id/text_view2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textSize="20sp"
-        android:text="text_view2"/>
-    <ProgressBar
-        android:id="@+id/progress_bar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_marginBottom="20dp"/>
-
+    <com.laplace.dove.batcharchiver.ui.dialog.ProgressView
+        android:id="@+id/dialog_double_progress_progress2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"/>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

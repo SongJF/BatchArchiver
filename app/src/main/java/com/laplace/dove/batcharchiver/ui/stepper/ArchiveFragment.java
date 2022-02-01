@@ -132,29 +132,23 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == STAGE_INDEX_FINISH){
                     loadingDialog.dismiss();
-                    archiveDialog.progressBar1.setMax(msg.arg1);
-                    archiveDialog.progressBar1.setProgress(0);
+                    archiveDialog.firstProgressView.setMax(msg.arg1);
+                    archiveDialog.firstProgressView.setProgress(0);
                     archiveDialog.show();
                 }
 
                 if (msg.what == STAGE_ARCHIVE_NEXT){
-                    archiveDialog.progressBar1.setProgress(archiveDialog.progressBar1.getProgress() + 1);
-                    String displayName = String.format(getResources().getConfiguration().getLocales().get(0) ,"(%d/%d) %s",
-                            archiveDialog.progressBar1.getProgress(), archiveDialog.progressBar1.getMax(), msg.obj);
-                    archiveDialog.textView1.setText(displayName);
-                    archiveDialog.textView2.setText(R.string.dialog_indexing);
+                    archiveDialog.firstProgressNext((String) msg.obj);
+                    archiveDialog.secondProgressView.setTitle(getString(R.string.dialog_indexing));
                 }
 
                 if (msg.what == STAGE_FILE_COUNT){
-                    archiveDialog.progressBar2.setMax(msg.arg1);
-                    archiveDialog.progressBar2.setProgress(0);
+                    archiveDialog.secondProgressView.setMax(msg.arg1);
+                    archiveDialog.secondProgressView.setProgress(0);
                 }
 
                 if (msg.what == STAGE_FILE_NAME_NEXT){
-                    archiveDialog.progressBar2.setProgress(archiveDialog.progressBar2.getProgress() + 1);
-                    String displayName = String.format(getResources().getConfiguration().locale ,"(%d/%d) %s",
-                            archiveDialog.progressBar2.getProgress(), archiveDialog.progressBar2.getMax(), msg.obj);
-                    archiveDialog.textView2.setText(displayName);
+                    archiveDialog.secondProgressNext((String) msg.obj);
                 }
 
                 if (msg.what == STAGE_ARCHIVE_FAILURE){
@@ -209,7 +203,11 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
                 Consumer<File> currentFileNotifyer = file -> {
                     Message msg = Message.obtain();
                     msg.what = STAGE_FILE_NAME_NEXT;
-                    msg.obj = file.getName();
+                    String name = file.getName();
+                    if (file.isDirectory()){
+                        name = "[d] " + name;
+                    }
+                    msg.obj = name;
                     handler.sendMessage(msg);
                 };
                 for (Path path : folders) {
