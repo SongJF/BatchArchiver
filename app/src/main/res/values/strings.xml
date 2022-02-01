@@ -7,13 +7,34 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_transform">Transform</string>
-    <string name="menu_reflow">Reflow</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_reflow">Archive</string>
     <string name="menu_settings">Settings</string>
 
     <string name="form_discard_question">Discard?</string>
     <string name="form_info_will_be_lost">All the information will be lost</string>
     <string name="form_discard">Discard</string>
     <string name="form_discard_cancel">Cancel</string>
+
+    <string name="fragment_archive_title">从文件夹添加</string>
+    <string name="dialog_indexing">正在索引...</string>
+    <string name="step_click_to_select_folder">点击以选择文件夹</string>
+    <string name="step_input_to_set_pass_word">输入以设置密码</string>
+    <string name="step_title_select_source_dir">选择源文件夹</string>
+    <string name="step_title_select_dest_dir">选择归档文件夹</string>
+    <string name="step_title_set_password">设置密码</string>
+    <string name="step_cancel_button_text">取消</string>
+    <string name="step_final_title">完成配置</string>
+    <string name="step_next_button_text">继续</string>
+    <string name="step_last_button_text">开始压缩</string>
+    <string name="radio_standard">标准</string>
+    <string name="radio_aes_256">AES 256</string>
+    <string name="textView_encryption_type">加密算法: </string>
+    <string name="radio_compress_fastest">快速</string>
+    <string name="radio_compress_normal">均衡</string>
+    <string name="radio_compress_storage">存储</string>
+    <string name="step_title_set_compress_level">压缩级别</string>
+    <string name="dialog_archiving">正在压缩...</string>
+    <string name="snakebar_operate_complete">操作完成</string>
+    <string name="snakebar_no_avaliable_folder">无可压缩文件夹</string>
+    <string name="snakebar_archive_failed">部分文件解压失败，错误信息已粘贴至剪贴板</string>
 </resources>

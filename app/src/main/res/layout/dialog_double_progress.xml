@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="text_view1"/>
+    <ProgressBar
+        android:id="@+id/progress_bar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+    <TextView
+        android:id="@+id/text_view2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:text="text_view2"/>
+    <ProgressBar
+        android:id="@+id/progress_bar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_marginBottom="20dp"/>
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ernestoyaquello.com.verticalstepperform.VerticalStepperFormView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_archive"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.stepper.ArchiveFragment">
-
-
-</FrameLayout>
+    app:form_confirmation_step_title_text="@string/step_final_title"
+    app:form_next_button_text="@string/step_next_button_text"
+    app:form_last_button_text="@string/step_last_button_text"
+    app:form_cancel_button_text="@string/step_cancel_button_text"
+    app:form_circle_background_color="@color/design_default_color_primary"
+    app:form_next_button_background_color="@color/design_default_color_primary"
+    app:form_next_button_pressed_background_color="@color/design_default_color_primary_dark"
+    app:form_display_cancel_button_in_last_step="true"
+    app:form_cancel_button_background_color="@android:color/transparent"
+    app:form_cancel_button_pressed_background_color="@android:color/transparent"
+    app:form_cancel_button_text_color="@color/design_default_color_primary"
+    app:form_cancel_button_pressed_text_color="@color/design_default_color_primary_dark"
+    />
