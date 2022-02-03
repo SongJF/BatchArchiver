@@ -19,9 +19,12 @@ import com.laplace.dove.batcharchiver.databinding.ArchiveFragmentBinding;
 import com.laplace.dove.batcharchiver.ui.dialog.DoubleProgressDialog;
 import com.laplace.dove.batcharchiver.ui.dialog.LoadingDialog;
 import com.laplace.dove.batcharchiver.ui.stepper.step.ArchiveCompressLevelStep;
+import com.laplace.dove.batcharchiver.ui.stepper.step.ArchiveFileSelectStep;
 import com.laplace.dove.batcharchiver.ui.stepper.step.ArchiveFolderSelectStep;
 import com.laplace.dove.batcharchiver.ui.stepper.step.ArchivePasswordStep;
+import com.laplace.dove.batcharchiver.ui.stepper.step.ArchiveSqlSetStep;
 import com.laplace.dove.batcharchiver.utils.ClipboardUtils;
+import com.laplace.dove.batcharchiver.utils.DataBaseManager;
 import com.laplace.dove.batcharchiver.utils.archive.ArchiveParam;
 import com.laplace.dove.batcharchiver.utils.archive.ArchiveUtil;
 
@@ -31,17 +34,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
-public class ArchiveFragment extends Fragment implements StepperFormListener {
+public class DbArchiveFragment extends Fragment implements StepperFormListener {
     private static final String STATE_SOURCE = "state_source";
     private static final String STATE_DEST = "state_dest";
     private static final String STATE_COMPRESS_LEVEL = "state_compress_level";
     private static final String STATE_PASSWORD = "state_password";
     private static final String STATE_ENCRYPTION_TYPE= "state_encryption_type";
+    private static final String STATE_DB_FILE = "state_db_file";
+    private static final String STATE_SQL_CMD = "state_sql_cmd";
 
     private static final int STAGE_ARCHIVE_FAILURE = -1;
     private static final int STAGE_ARCHIVE_FINISH = 0;
@@ -55,6 +62,8 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
     private ArchiveFolderSelectStep destDirStep;
     private ArchivePasswordStep passWordStep;
     private ArchiveCompressLevelStep compressLevelStep;
+    private ArchiveFileSelectStep dbSelectStep;
+    private ArchiveSqlSetStep sqlSetStep;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -62,12 +71,16 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
         binding = ArchiveFragmentBinding.inflate(inflater, container, false);
 
         sourceDirStep = new ArchiveFolderSelectStep(getString(R.string.step_title_select_source_dir));
+        dbSelectStep = new ArchiveFileSelectStep(getString(R.string.step_title_select_db_file));
+        sqlSetStep = new ArchiveSqlSetStep(getString(R.string.step_title_select_sql));
         destDirStep = new ArchiveFolderSelectStep(getString(R.string.step_title_select_dest_dir));
         compressLevelStep = new ArchiveCompressLevelStep(getString(R.string.step_title_set_compress_level));
         passWordStep = new ArchivePasswordStep(getString(R.string.step_title_set_password));
         binding.fragmentArchive
                 .setup(this,
                         sourceDirStep,
+                        dbSelectStep,
+                        sqlSetStep,
                         destDirStep,
                         compressLevelStep,
                         passWordStep
@@ -85,6 +98,8 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
         outState.putString(STATE_COMPRESS_LEVEL, compressLevelStep.getStepData());
         outState.putCharArray(STATE_PASSWORD, passWordStep.getStepData().getPassword());
         outState.putString(STATE_ENCRYPTION_TYPE, passWordStep.getStepData().getEncryptionType());
+        outState.putString(STATE_DB_FILE, dbSelectStep.getStepData());
+        outState.putString(STATE_SQL_CMD, sqlSetStep.getStepData());
 
         super.onSaveInstanceState(outState);
     }
@@ -109,6 +124,14 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
                 param.setPassword(savedInstanceState.getCharArray(STATE_PASSWORD));
                 param.setEncryptionType(savedInstanceState.getString(STATE_ENCRYPTION_TYPE));
                 passWordStep.restoreStepData(param);
+            }
+
+            if (savedInstanceState.containsKey(STATE_DB_FILE)){
+                dbSelectStep.restoreStepData(savedInstanceState.getString(STATE_DB_FILE));
+            }
+
+            if (savedInstanceState.containsKey(STATE_SQL_CMD)){
+                sqlSetStep.restoreStepData(savedInstanceState.getString(STATE_SQL_CMD));
             }
         }
 
@@ -152,12 +175,13 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
                 }
 
                 if (msg.what == STAGE_ARCHIVE_FAILURE){
-                    Snackbar.make(getView(), getString(R.string.snakebar_operate_complete), Snackbar.LENGTH_LONG).show();
                     finish();
+                    Snackbar.make(getView(), (String)msg.obj, Snackbar.LENGTH_LONG).show();
                 }
 
                 if (msg.what == STAGE_ARCHIVE_FINISH) {
                     finish();
+                    Snackbar.make(getView(), getString(R.string.snakebar_operate_complete), Snackbar.LENGTH_LONG).show();
                 }
             }
 
@@ -165,14 +189,14 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
                 loadingDialog.dismiss();
                 archiveDialog.dismiss();
                 goBack();
-                Snackbar.make(getView(), getString(R.string.snakebar_operate_complete), Snackbar.LENGTH_LONG).show();
             }
         };
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Path> folders = getSubDirs(sourceDirStep.getStepData());
+                Map<String, String> srcDestNameMap = getSrcDestFromDb();
+                List<Path> folders = getSubDirs(sourceDirStep.getStepData(), srcDestNameMap);
 
                 if (folders.size() == 0){
                     Message msg = Message.obtain();
@@ -211,29 +235,52 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
                     handler.sendMessage(msg);
                 };
                 for (Path path : folders) {
-                    if (!archiveFolder(path, archiveNotifyer, fileConutNotifyer, currentFileNotifyer)){
+                    if (!archiveFolder(path, srcDestNameMap.get(path.getFileName().toString()),
+                            archiveNotifyer, fileConutNotifyer, currentFileNotifyer)){
                         failedArchives.add(path);
                     }
                 }
-               if (failureExist(failedArchives)){
-                   Message failure = Message.obtain();
-                   failure.what = STAGE_ARCHIVE_FAILURE;
-                   failure.obj = getString(R.string.snakebar_archive_failed);
-                   handler.sendMessage(failure);
-               }
+                if (failureExist(failedArchives)){
+                    Message failure = Message.obtain();
+                    failure.what = STAGE_ARCHIVE_FAILURE;
+                    failure.obj = getString(R.string.snakebar_archive_failed);
+                    handler.sendMessage(failure);
+                }
 
                 handler.sendEmptyMessage(STAGE_ARCHIVE_FINISH);
             }
         }).start();
     }
 
-    private List<Path> getSubDirs(String sourcePath){
+    private Map<String, String> getSrcDestFromDb(){
+        try {
+            return DataBaseManager.mapQuery(dbSelectStep.getStepData(), sqlSetStep.getStepData(), cursor -> {
+                HashMap<String, String> srcDestMap = new HashMap<>();
+                while (cursor.moveToNext()){
+                    int srcIndex = cursor.getColumnIndex("src");
+                    String src = srcIndex >=0 && srcIndex < cursor.getColumnCount() ?
+                            cursor.getString(srcIndex) : "";
+                    int destIndex = cursor.getColumnIndex("dest");
+                    String dest = destIndex >= 0 && destIndex < cursor.getColumnCount() ?
+                            cursor.getString(destIndex) : "";
+                    srcDestMap.put(src, dest);
+                }
+                return srcDestMap;
+            });
+        }catch (Exception e){
+            return new HashMap<>();
+        }
+    }
+
+    private List<Path> getSubDirs(@NonNull String sourcePath, @NonNull Map<String, String> dirNames){
         List<Path> subDirs = new ArrayList<>();
 
         Path root = Paths.get(sourcePath);
         try {
             Files.walk(root, 1)
-                    .filter(dir -> Files.isDirectory(dir) && !dir.equals(root))
+                    .filter(dir -> Files.isDirectory(dir) &&
+                            !dir.equals(root) &&
+                            dirNames.containsKey(dir.getFileName().toString()))
                     .forEach(subDirs::add);
         } catch (IOException e) {
             return subDirs;
@@ -242,13 +289,18 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
         return subDirs;
     }
 
-    private boolean archiveFolder(Path path, Consumer<String> archiveNotifyer, Consumer<Integer> fileCountNotifyer, Consumer<File> currentFileNotifyer){
+    private boolean archiveFolder(Path path, String archiveName,
+                                  Consumer<String> archiveNotifyer,
+                                  Consumer<Integer> fileCountNotifyer,
+                                  Consumer<File> currentFileNotifyer){
         File src = new File(path.toUri());
         if (!src.exists()){
             return false;
         }
 
-        File archive = new File(destDirStep.getStepData() + "/" + path.getFileName() + ".zip");
+        archiveName = archiveName == null || archiveName.isEmpty() ?
+                path.getFileName().toString() : archiveName;
+        File archive = new File(destDirStep.getStepData() + "/" + archiveName + ".zip");
         archiveNotifyer.accept(archive.getName());
         try {
             ArchiveParam param = new ArchiveParam(

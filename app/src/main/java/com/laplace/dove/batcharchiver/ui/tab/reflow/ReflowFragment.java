@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.laplace.dove.batcharchiver.R;
 import com.laplace.dove.batcharchiver.databinding.FragmentReflowBinding;
 
@@ -24,19 +23,18 @@ public class ReflowFragment extends Fragment {
 
 
         binding = FragmentReflowBinding.inflate(inflater, container, false);
-        final  Fragment thisFrag = this;
-        View root = binding.getRoot();
-
+        final Fragment thisFrag = this;
 
         binding.cardArchive.setOnClickListener(view -> {
             NavController controller = NavHostFragment.findNavController(thisFrag);
             controller.navigate(R.id.action_reflow_to_archive_to_archiveFragment);
         });
         binding.cardArchiveFromDb.setOnClickListener(view -> {
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).show();
+            NavController controller = NavHostFragment.findNavController(thisFrag);
+            controller.navigate(R.id.action_reflow_to_archive_to_dbArchiveFragment);
         });
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override

@@ -33,6 +33,10 @@ public class ArchiveUtil {
             fileCountNotifyer.accept(fileList.size());
         }
 
+        if (!dest.getParentFile().exists()){
+            dest.getParentFile().mkdir();
+        }
+
         zip4jZip(fileList, dest, param, currentFileNotifyer);
     }
 
@@ -51,9 +55,7 @@ public class ArchiveUtil {
                 currentFileNotifyer.accept(file);
             }
 
-            if (file.isDirectory()){
-                zipFile.addFile(file, archiveParam);
-            }
+            zipFile.addFile(file, archiveParam);
         }
     }
 

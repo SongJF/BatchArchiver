@@ -17,6 +17,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_reflow_to_archive_to_dbArchiveFragment"
+            app:destination="@id/dbArchiveFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -29,5 +36,10 @@
         android:id="@+id/archiveFragment"
         android:name="com.laplace.dove.batcharchiver.ui.stepper.ArchiveFragment"
         android:label="@string/fragment_archive_title"
+        tools:layout="@layout/archive_fragment" />
+    <fragment
+        android:id="@+id/dbArchiveFragment"
+        android:name="com.laplace.dove.batcharchiver.ui.stepper.DbArchiveFragment"
+        android:label="@string/fragment_title_archive_from_db"
         tools:layout="@layout/archive_fragment" />
 </navigation>

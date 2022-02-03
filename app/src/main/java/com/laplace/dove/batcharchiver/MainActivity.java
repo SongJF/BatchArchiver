@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,7 +23,7 @@ import com.laplace.dove.batcharchiver.databinding.ActivityMainBinding;
 import com.laplace.dove.batcharchiver.utils.StoragePermissionUtil;
 
 public class MainActivity extends AppCompatActivity {
-
+    private MainActivityViewModel viewModel;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -34,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-//        binding.appBarMain.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show());
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationView navigationView = binding.navView;
         if (navigationView != null) {
@@ -47,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         StoragePermissionUtil.tryGetPermittion(this);
+
+        viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
     }
 
     @Override

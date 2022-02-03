@@ -3,7 +3,6 @@ package com.laplace.dove.batcharchiver.ui.stepper.step;
 import android.app.Activity;
 import android.os.Environment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,11 +16,10 @@ import java.io.File;
 
 import ernestoyaquello.com.verticalstepperform.Step;
 
-public class ArchiveSelectFolderStep extends Step<String> implements OnFilePickedListener {
-    private Button selectFolderBtn;
+public class ArchiveFileSelectStep extends Step<String> implements OnFilePickedListener {
     private TextView textView;
 
-    public ArchiveSelectFolderStep(String title) {
+    public ArchiveFileSelectStep(String title) {
         super(title);
     }
 
@@ -57,13 +55,13 @@ public class ArchiveSelectFolderStep extends Step<String> implements OnFilePicke
     @Override
     protected View createStepContentLayout() {
         textView = new TextView(getContext());
-        textView.setHint(R.string.step_click_to_select_folder);
+        textView.setHint(R.string.step_click_to_select_file);
         textView.setClickable(true);
-        ArchiveSelectFolderStep step = this;
+        ArchiveFileSelectStep step = this;
         textView.setOnClickListener(view -> {
             Activity activity = (Activity) view.getContext();
             FilePicker picker = new FilePicker(activity);
-            picker.setInitDir(ExplorerMode.DIRECTORY, Environment.getExternalStorageDirectory());
+            picker.setInitDir(ExplorerMode.FILE, Environment.getExternalStorageDirectory());
             picker.setOnFilePickedListener(step);
             picker.show();
         });
@@ -84,7 +82,7 @@ public class ArchiveSelectFolderStep extends Step<String> implements OnFilePicke
 
     @Override
     public void onFilePicked(@NonNull File file) {
-        if (file.isDirectory()){
+        if (file.isFile()){
             textView.setText(file.getAbsolutePath());
             markAsCompletedOrUncompleted(true);
         }
