@@ -22,6 +22,7 @@ import com.laplace.dove.batcharchiver.ui.stepper.step.ArchiveCompressLevelStep;
 import com.laplace.dove.batcharchiver.ui.stepper.step.ArchiveFolderSelectStep;
 import com.laplace.dove.batcharchiver.ui.stepper.step.ArchivePasswordStep;
 import com.laplace.dove.batcharchiver.utils.ClipboardUtils;
+import com.laplace.dove.batcharchiver.utils.SnackBarQueue;
 import com.laplace.dove.batcharchiver.utils.archive.ArchiveParam;
 import com.laplace.dove.batcharchiver.utils.archive.ArchiveUtil;
 
@@ -152,11 +153,12 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
                 }
 
                 if (msg.what == STAGE_ARCHIVE_FAILURE){
-                    Snackbar.make(getView(), getString(R.string.snakebar_operate_complete), Snackbar.LENGTH_LONG).show();
+                    SnackBarQueue.append(Snackbar.make(getView(), (String)msg.obj, Snackbar.LENGTH_LONG));
                     finish();
                 }
 
                 if (msg.what == STAGE_ARCHIVE_FINISH) {
+                    SnackBarQueue.append(Snackbar.make(getView(), getString(R.string.snakebar_operate_succced), Snackbar.LENGTH_SHORT));
                     finish();
                 }
             }
@@ -165,7 +167,7 @@ public class ArchiveFragment extends Fragment implements StepperFormListener {
                 loadingDialog.dismiss();
                 archiveDialog.dismiss();
                 goBack();
-                Snackbar.make(getView(), getString(R.string.snakebar_operate_complete), Snackbar.LENGTH_LONG).show();
+                SnackBarQueue.append(Snackbar.make(getView(), getString(R.string.snakebar_operate_complete), Snackbar.LENGTH_SHORT));
             }
         };
 

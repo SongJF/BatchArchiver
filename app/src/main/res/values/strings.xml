@@ -44,4 +44,5 @@
     <string name="dialog_denine_button">取消</string>
     <string name="dialog_add_sql_title">添加sql</string>
     <string name="dialog_input_sql_hint">请select出src与dest(可选)列</string>
+    <string name="snakebar_operate_succced">压缩成功</string>
 </resources>
