@@ -1,4 +1,4 @@
-package com.laplace.dove.batcharchiver.ui.tab.reflow;
+package com.laplace.dove.batcharchiver.ui.tab.archive;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,17 +12,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.laplace.dove.batcharchiver.R;
-import com.laplace.dove.batcharchiver.databinding.FragmentReflowBinding;
+import com.laplace.dove.batcharchiver.databinding.FragmentArchiveBinding;
 
-public class ReflowFragment extends Fragment {
-    private FragmentReflowBinding binding;
+public class ArchiveFragment extends Fragment {
+    private FragmentArchiveBinding binding;
     private FragmentManager fm;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        binding = FragmentReflowBinding.inflate(inflater, container, false);
+        binding = FragmentArchiveBinding.inflate(inflater, container, false);
         final Fragment thisFrag = this;
 
         binding.cardArchive.setOnClickListener(view -> {

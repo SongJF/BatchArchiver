@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/nav_reflow"
-        android:name="com.laplace.dove.batcharchiver.ui.tab.reflow.ReflowFragment"
+        android:name="com.laplace.dove.batcharchiver.ui.tab.archive.ArchiveFragment"
         android:label="@string/menu_reflow"
-        tools:layout="@layout/fragment_reflow" >
+        tools:layout="@layout/fragment_archive" >
         <action
             android:id="@+id/action_reflow_to_archive_to_archiveFragment"
             app:destination="@id/archiveFragment"
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/archiveFragment"
-        android:name="com.laplace.dove.batcharchiver.ui.stepper.ArchiveFragment"
+        android:name="com.laplace.dove.batcharchiver.ui.stepper.FolderArchiveFragment"
         android:label="@string/fragment_archive_title"
         tools:layout="@layout/archive_fragment" />
     <fragment

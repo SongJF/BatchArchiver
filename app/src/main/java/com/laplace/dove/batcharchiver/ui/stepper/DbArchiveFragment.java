@@ -176,13 +176,13 @@ public class DbArchiveFragment extends Fragment implements StepperFormListener {
                 }
 
                 if (msg.what == STAGE_ARCHIVE_FAILURE){
-                    finish();
                     SnackBarQueue.append(Snackbar.make(getView(), (String)msg.obj, Snackbar.LENGTH_LONG));
+                    finish();
                 }
 
                 if (msg.what == STAGE_ARCHIVE_FINISH) {
-                    finish();
                     SnackBarQueue.append(Snackbar.make(getView(), getString(R.string.snakebar_operate_succced), Snackbar.LENGTH_SHORT));
+                    finish();
                 }
             }
 

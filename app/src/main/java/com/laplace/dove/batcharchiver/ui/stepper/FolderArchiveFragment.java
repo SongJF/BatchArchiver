@@ -37,7 +37,7 @@ import java.util.function.Consumer;
 
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
-public class ArchiveFragment extends Fragment implements StepperFormListener {
+public class FolderArchiveFragment extends Fragment implements StepperFormListener {
     private static final String STATE_SOURCE = "state_source";
     private static final String STATE_DEST = "state_dest";
     private static final String STATE_COMPRESS_LEVEL = "state_compress_level";
