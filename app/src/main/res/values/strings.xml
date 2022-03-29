@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">BatchArchiver</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">BatchArchiver</string>
+    <string name="nav_header_subtitle">LaplacDove@outlook.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_reflow">Archive</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Sqls</string>
 
     <string name="form_discard_question">Discard?</string>
     <string name="form_info_will_be_lost">All the information will be lost</string>
